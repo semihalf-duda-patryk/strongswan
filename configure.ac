@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2007-2017 Tobias Brunner
-# Copyright (C) 2006-2017 Andreas Steffen
+# Copyright (C) 2006-2019 Andreas Steffen
 # Copyright (C) 2006-2014 Martin Willi
 # HSR Hochschule fuer Technik Rapperswil
 #
@@ -132,6 +132,7 @@ ARG_ENABL_SET([chapoly],        [enables the ChaCha20/Poly1305 AEAD plugin.])
 ARG_DISBL_SET([cmac],           [disable CMAC crypto implementation plugin.])
 ARG_ENABL_SET([ctr],            [enables the Counter Mode wrapper crypto plugin.])
 ARG_DISBL_SET([des],            [disable DES/3DES software implementation plugin.])
+ARG_ENABL_SET([drbg],           [enables the NIST Deterministic Random Bit Generator plugin.])
 ARG_DISBL_SET([fips-prf],       [disable FIPS PRF software implementation plugin.])
 ARG_ENABL_SET([gcm],            [enables the GCM AEAD wrapper crypto plugin.])
 ARG_ENABL_SET([gcrypt],         [enables the libgcrypt plugin.])
@@ -489,6 +490,10 @@ fi
 
 if test x$gmp = xtrue -o x$ntru = xtrue -o x$bliss = xtrue; then
 	mgf1=true
+fi
+
+if test x$ntru = xtrue; then
+	drbg=true
 fi
 
 if test x$stroke = xtrue; then
@@ -1442,6 +1447,7 @@ ADD_PLUGIN([ctr],                  [s charon scripts nm cmd])
 ADD_PLUGIN([ccm],                  [s charon scripts nm cmd])
 ADD_PLUGIN([gcm],                  [s charon scripts nm cmd])
 ADD_PLUGIN([ntru],                 [s charon scripts nm cmd])
+ADD_PLUGIN([drbg],                 [s charon pki scripts nm cmd])
 ADD_PLUGIN([newhope],              [s charon scripts nm cmd])
 ADD_PLUGIN([bliss],                [s charon pki scripts nm cmd])
 ADD_PLUGIN([curl],                 [s charon scepclient pki scripts nm cmd])
@@ -1611,6 +1617,7 @@ AM_CONDITIONAL(USE_AF_ALG, test x$af_alg = xtrue)
 AM_CONDITIONAL(USE_NTRU, test x$ntru = xtrue)
 AM_CONDITIONAL(USE_NEWHOPE, test x$newhope = xtrue)
 AM_CONDITIONAL(USE_BLISS, test x$bliss = xtrue)
+AM_CONDITIONAL(USE_DRBG, test x$drbg = xtrue)
 
 #  charon plugins
 # ----------------
@@ -1887,6 +1894,7 @@ AC_CONFIG_FILES([
 	src/libstrongswan/plugins/ccm/Makefile
 	src/libstrongswan/plugins/gcm/Makefile
 	src/libstrongswan/plugins/af_alg/Makefile
+	src/libstrongswan/plugins/drbg/Makefile
 	src/libstrongswan/plugins/ntru/Makefile
 	src/libstrongswan/plugins/bliss/Makefile
 	src/libstrongswan/plugins/bliss/tests/Makefile
